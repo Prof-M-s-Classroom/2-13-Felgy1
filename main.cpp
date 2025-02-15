@@ -72,27 +72,29 @@ public:
 
     void dellast() {
         Node<T> *temp = head;
-        while (temp->next!=NULL)
+        while (temp->next->next!=NULL)
             temp = temp->next;
-        delete temp;
+        delete temp->next;
+        temp->next = NULL;
         length--;
     }
 
-    void deleteNode(int index, T *value) {
+    void deleteNode(int index) {
        //TODO:Write the function to delete at the given index. Reuse the pre-written functions for edge cases. Account for missing index.
-        if (index<0 || index>=length) {
+        if (index < 0 || index >= length) {
             cout << "index is invalid" << endl;
             return;
         }
-        if (index==0) {
-            delfirst(value);
+        if (index == 0) {
+            delfirst();
         }
-        if (index==length) {
-            dellast(value);
+        if (index == length-1) {
+            dellast();
         }
         else {
             Node<T> *prev = get(index-1);
-            Node<T> *temp = get(index);
+            Node<T> *temp = prev->next;
+
             prev->next = temp->next;
             delete temp;
             length--;
@@ -102,23 +104,23 @@ public:
 
    void insert(int index, T *value) {
         //TODO:Write a function to insert a new node at a give index. Reuse the pre-written functions for edge cases. Account for missing index
-        if (index<0 || index>=length) {
+        if (index < 0 || index > length) {
             cout << "index is invalid" << endl;
             return;
         }
         if (index==0) {
             addhead(value);
+            return;
         }
-        if (index==length) {
+        if (index == length) {
             add(value);
+            return;
         }
-        else {
-            Node<T> newNode=new Node<T>(value);
-            Node<T> *temp = get(index-1);
-            newNode->next=temp->next;
-            temp->next=newNode;
-            length++;
-        }
+        Node<T> *newNode=new Node<T>(value);
+        Node<T> *temp = get(index-1);
+        newNode->next = temp->next;
+        temp->next=newNode;
+        length++;
         return;
     }
 
@@ -128,11 +130,12 @@ public:
         Node<T> *prev = NULL;
         Node<T> *curr = head;
         while (curr != NULL) {
-            next= curr->nextNode;
-            curr->nextNode=prev;
+            next= curr->next;
+            curr->next=prev;
             prev = curr;
             curr =next;
         }
+        head = prev;
     }
 
     void print() {
@@ -153,15 +156,15 @@ int main() {
     ll->add(s2);
     ll->addhead(s3);
     ll->print();
-    ll->delfirst();
-    ll->print();
-    ll->dellast();
-    ll->print();
-
-    ll->deleteNode();
-    ll->print();
-    ll->insert(2, "");
-    ll->print();
+    // ll->delfirst();
+    // ll->print();
+    // ll->dellast();
+    // ll->print();
+    //
+    // ll->insert(1, s2);
+    // ll->print();
+    // ll->deleteNode(1);
+    // ll->print();
     ll->reverselist();
     ll->print();
 }
